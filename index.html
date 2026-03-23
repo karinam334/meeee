@@ -1,139 +1,261 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Perfil - Tapitas con Causa</title>
-    <style>
-        body {
-            background-color: #000;
-            color: #ccc;
-            font-family: "Courier New", Courier, monospace;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-        }
+<meta charset="UTF-8">
+<title>Perfil Extenso v2.0</title>
+<style>
+    /* RESET BÁSICO */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        /* Tiras laterales */
-        .sidebar {
-            width: 150px;
-            background-image: url('im2.png'); /* Puedes cambiar la numeración aquí */
-            background-repeat: repeat-y;
-            height: 100vh;
-            position: fixed;
-        }
-        .left { left: 0; }
-        .right { right: 0; }
+    body {
+        /* IMAGEN DE FONDO GENERAL */
+        background-image: url('fondo.png');
+        background-repeat: repeat;
+        color: #ddd;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 13px;
+        display: flex;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 0 160px; /* Espacio para las tiras laterales fixed */
+    }
 
-        /* Contenedor Principal */
-        .main-container {
-            width: 700px;
-            background-color: #111;
-            border: 2px solid #333;
-            margin: 20px 0;
-            padding: 20px;
-            z-index: 1;
-        }
+    /* TIRAS LATERALES FIXED - ESTILO POLAROID */
+    .sidebar-tiras {
+        position: fixed;
+        top: 0;
+        width: 150px;
+        height: 100vh;
+        overflow-y: scroll; /* Permite scroll independiente si hay muchas */
+        padding: 10px;
+        background: rgba(0,0,0,0.7); /* Fondo semi-transparente para que se vea el fondo.png detrás */
+        border-left: 2px solid #444;
+        border-right: 2px solid #444;
+        z-index: 10;
+        scrollbar-width: none; /* Ocultar scrollbar en Firefox */
+    }
+    .sidebar-tiras::-webkit-scrollbar { display: none; } /* Ocultar scrollbar en Chrome/Safari */
 
-        /* Banner y Cabecera */
-        .header-banner {
-            width: 100%;
-            height: 200px;
-            background-image: url('banner.gif');
-            background-size: cover;
-            border: 1px solid #444;
-            margin-bottom: 20px;
-        }
+    .left-tira { left: 0; }
+    .right-tira { right: 0; }
 
-        .profile-grid {
-            display: grid;
-            grid-template-columns: 200px 1fr;
-            gap: 20px;
-        }
+    /* Estilo Polaroid */
+    .polaroid-frame {
+        background-color: #fff;
+        padding: 8px 8px 25px 8px;
+        border: 1px solid #ccc;
+        box-shadow: 3px 3px 5px rgba(0,0,0,0.5);
+        margin-bottom: 15px;
+        transform: rotate(-2deg); /* Ligera rotación aleatoria */
+        transition: transform 0.2s;
+    }
+    .polaroid-frame:nth-child(even) { transform: rotate(3deg); }
+    .polaroid-frame:hover { transform: rotate(0deg) scale(1.05); z-index: 11; }
 
-        .photo-column img {
-            width: 100%;
-            border: 2px solid #444;
-            filter: grayscale(100%);
-        }
+    .polaroid-frame img {
+        width: 100%;
+        display: block;
+        border: 1px solid #999;
+        /* filter: grayscale(100%); Opcional: filtro gris */
+    }
 
-        /* Secciones de contenido */
-        .box {
-            border: 1px solid #333;
-            background: #0a0a0a;
-            padding: 15px;
-            margin-bottom: 15px;
-        }
+    /* CONTENEDOR CENTRAL */
+    .main-container {
+        width: 750px;
+        background-color: #111;
+        border: 3px solid #444;
+        margin: 20px 0;
+        padding: 15px;
+        z-index: 1;
+        position: relative;
+    }
 
-        h2 {
-            background: #222;
-            color: #fff;
-            font-size: 14px;
-            padding: 5px;
-            margin-top: 0;
-            text-transform: uppercase;
-            border-bottom: 1px solid #444;
-        }
+    /* CABECERA Y BANNER */
+    .header-banner {
+        width: 100%;
+        height: 250px;
+        background-image: url('banner.gif');
+        background-size: cover;
+        background-position: center;
+        border: 2px solid #555;
+        margin-bottom: 15px;
+    }
 
-        .stats-list {
-            list-style: none;
-            padding: 0;
-        }
+    /* ESTRUCTURA DE GRILLA DE CONTENIDO */
+    .profile-grid {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: 15px;
+    }
 
-        .stats-list li {
-            margin-bottom: 5px;
-            font-size: 0.9em;
-        }
+    /* COLUMNA IZQUIERDA: ICONO Y ESTADÍSTICAS */
+    .photo-column .main-photo-frame {
+        border: 2px solid #555;
+        padding: 5px;
+        background: #000;
+        margin-bottom: 15px;
+    }
+    .photo-column .main-photo-frame img {
+        width: 100%;
+        display: block;
+    }
 
-        .stats-list b { color: #888; }
+    /* CUADROS DE TEXTO (ESTILO BLOQUE) */
+    .box {
+        border: 1px solid #444;
+        background-color: #0a0a0a;
+        margin-bottom: 15px;
+        overflow: hidden;
+    }
 
-        /* Reproductor oculto */
-        #music-trigger {
-            cursor: pointer;
-            color: #666;
-            text-decoration: underline;
-            font-size: 12px;
-        }
-    </style>
+    .box h2 {
+        background: #222;
+        color: #fff;
+        font-size: 13px;
+        padding: 4px 8px;
+        text-transform: uppercase;
+        border-bottom: 1px solid #444;
+        font-weight: bold;
+    }
+
+    .box-content {
+        padding: 10px;
+        line-height: 1.5;
+    }
+
+    /* Listas de datos */
+    .data-list { list-style: none; }
+    .data-list li { margin-bottom: 4px; border-bottom: 1px solid #222; padding-bottom: 2px; }
+    .data-list b { color: #888; text-transform: lowercase; }
+
+    /* REPRODUCTOR DE MÚSICA */
+    .music-player {
+        text-align: center;
+        border: 1px solid #666;
+        background: #000;
+        padding: 5px;
+        margin-top: 10px;
+    }
+    #music-trigger {
+        cursor: pointer;
+        color: #0f0; /* Color llamativo retro */
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 12px;
+    }
+    #music-trigger:hover { color: #fff; text-decoration: underline; }
+
+    /* SCROLLBARS GENERALES */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #000; }
+    ::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #666; }
+
+</style>
 </head>
 <body>
 
-    <div class="sidebar left"></div>
-    <div class="sidebar right"></div>
+    <div class="sidebar-tiras left-tira">
+        <div class="polaroid-frame"><img src="im3.png" alt="Pic 3"></div>
+        <div class="polaroid-frame"><img src="im4.png" alt="Pic 4"></div>
+        <div class="polaroid-frame"><img src="im5.png" alt="Pic 5"></div>
+        <div class="polaroid-frame"><img src="im6.png" alt="Pic 6"></div>
+        <div class="polaroid-frame"><img src="im7.png" alt="Pic 7"></div>
+    </div>
+
+    <div class="sidebar-tiras right-tira">
+        <div class="polaroid-frame"><img src="im8.png" alt="Pic 8"></div>
+        <div class="polaroid-frame"><img src="im9.png" alt="Pic 9"></div>
+        <div class="polaroid-frame"><img src="im10.png" alt="Pic 10"></div>
+        <div class="polaroid-frame"><img src="im11.png" alt="Pic 11"></div>
+        <div class="polaroid-frame"><img src="im12.png" alt="Pic 12"></div>
+    </div>
 
     <div class="main-container">
         <div class="header-banner"></div>
 
         <div class="profile-grid">
+            
             <div class="photo-column">
-                <img src="im1.png" alt="Icono Principal">
-                <div class="box" style="margin-top:10px;">
-                    <h2>Contacto</h2>
-                    <p id="music-trigger" onclick="playMusic()">[ Reproducir Música ]</p>
-                    <audio id="myAudio" src="musica.mp3"></audio>
+                <div class="main-photo-frame">
+                    <img src="im1.png" alt="Icono Principal">
+                </div>
+
+                <div class="box">
+                    <h2>Estado</h2>
+                    <div class="box-content">
+                        <p>Mood: <span style="color:#888;">[ Procesando datos... ]</span></p>
+                        <p>Visto por última vez: <span style="color:#888;">Hace 5 minutos</span></p>
+                    </div>
+                </div>
+
+                <div class="box">
+                    <h2>Música Actual</h2>
+                    <div class="box-content music-player">
+                        <p style="color:#666; font-size:11px; margin-bottom:5px;">Track actual: Artista - Canción</p>
+                        <a id="music-trigger" onclick="playMusic()">>> [ PLAY / PAUSE ] <<</a>
+                        <audio id="myAudio" src="musica.mp3" loop></audio>
+                    </div>
+                </div>
+
+                <div class="box">
+                    <h2>Mis Enlaces</h2>
+                    <div class="box-content">
+                        <ul class="data-list">
+                            <li><a href="#" style="color:#bbb;">Blog Personal</a></li>
+                            <li><a href="#" style="color:#bbb;">Portfolio</a></li>
+                            <li><a href="#" style="color:#bbb;">Contacto Directo</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
 
             <div class="info-column">
                 <div class="box">
-                    <h2>Sobre mí</h2>
-                    <p>Escribe aquí tu descripción personal. Este espacio es ideal para explicar la visión de tu proyecto o lo que te inspira día a día.</p>
+                    <h2>Datos Básicos</h2>
+                    <div class="box-content">
+                        <ul class="data-list">
+                            <li><b>Edad:</b> [ Tu Edad ]</li>
+                            <li><b>Ubicación:</b> [ Ciudad / País ]</li>
+                            <li><b>Ocupación:</b> [ Lo que haces ]</li>
+                            <li><b>Zodiaco:</b> [ Signo ]</li>
+                        </ul>
+                    </div>
                 </div>
 
                 <div class="box">
-                    <h2>Detalles</h2>
-                    <ul class="stats-list">
-                        <li><b>Edad:</b> Tu Edad</li>
-                        <li><b>Habilidades:</b> Diseño, HTML, Gestión</li>
-                        <li><b>Gustos:</b> Música oscura, Estética retro, Programación</li>
-                        <li><b>Proyecto:</b> Tapitas con Causa</li>
-                    </ul>
+                    <h2>Presentación General</h2>
+                    <div class="box-content">
+                        <p>Bienvenido a mi espacio personal. Aquí encontrarás una recopilación de mis intereses, proyectos y pensamientos. Esta página está diseñada para ser extensa y detallada, reflejando mi visión y habilidades.</p>
+                        <p style="margin-top:10px;">Espero que disfrutes del recorrido. ¡No olvides revisar las polaroids laterales!</p>
+                    </div>
                 </div>
 
                 <div class="box">
-                    <h2>Galería</h2>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px;">
-                        <img src="im3.png" style="width:100%; border:1px solid #333;">
-                        <img src="im4.png" style="width:100%; border:1px solid #333;">
+                    <h2>Mis Gustos & Intereses</h2>
+                    <div class="box-content">
+                        <p><b>Música:</b> Lo-fi, Metal industrial, Post-punk, Synthwave.</p>
+                        <p><b>Películas:</b> Ciencia ficción clásica, Terror psicológico, Cine negro.</p>
+                        <p><b>Lectura:</b> Novelas distópicas, Filosofía existencialista, Documentación técnica.</p>
+                        <p><b>Hobbies:</b> Programación creativa, Restauración de hardware retro, Fotografía analógica.</p>
+                    </div>
+                </div>
+
+                <div class="box">
+                    <h2>Habilidades Técnicas</h2>
+                    <div class="box-content">
+                        <p>HTML5 / CSS3 / JavaScript (Intermedio)</p>
+                        <p>Diseño Gráfico (Photoshop, Illustrator)</p>
+                        <p>Gestión de Redes Sociales & SEO</p>
+                        <p>Edición de Video (Premiere Pro)</p>
+                    </div>
+                </div>
+
+                <div class="box">
+                    <h2>Proyectos Recientes</h2>
+                    <div class="box-content">
+                        <p>- [ Nombre Proyecto 1 ]: Breve descripción del objetivo.</p>
+                        <p>- [ Nombre Proyecto 2 ]: Otro proyecto en desarrollo.</p>
                     </div>
                 </div>
             </div>
@@ -143,12 +265,15 @@
     <script>
         function playMusic() {
             var audio = document.getElementById("myAudio");
+            var trigger = document.getElementById("music-trigger");
             if (audio.paused) {
                 audio.play();
-                document.getElementById("music-trigger").innerText = "[ Pausar Música ]";
+                trigger.innerText = ">> [ PAUSE ] <<";
+                trigger.style.color = "#f00"; // Rojo al reproducir
             } else {
                 audio.pause();
-                document.getElementById("music-trigger").innerText = "[ Reproducir Música ]";
+                trigger.innerText = ">> [ PLAY ] <<";
+                trigger.style.color = "#0f0"; // Verde al pausar
             }
         }
     </script>
