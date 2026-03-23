@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Perfil - Tapitas con Causa</title>
+    <style>
+        body {
+            background-color: #000;
+            color: #ccc;
+            font-family: "Courier New", Courier, monospace;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Tiras laterales */
+        .sidebar {
+            width: 150px;
+            background-image: url('im2.png'); /* Puedes cambiar la numeración aquí */
+            background-repeat: repeat-y;
+            height: 100vh;
+            position: fixed;
+        }
+        .left { left: 0; }
+        .right { right: 0; }
+
+        /* Contenedor Principal */
+        .main-container {
+            width: 700px;
+            background-color: #111;
+            border: 2px solid #333;
+            margin: 20px 0;
+            padding: 20px;
+            z-index: 1;
+        }
+
+        /* Banner y Cabecera */
+        .header-banner {
+            width: 100%;
+            height: 200px;
+            background-image: url('banner.gif');
+            background-size: cover;
+            border: 1px solid #444;
+            margin-bottom: 20px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 20px;
+        }
+
+        .photo-column img {
+            width: 100%;
+            border: 2px solid #444;
+            filter: grayscale(100%);
+        }
+
+        /* Secciones de contenido */
+        .box {
+            border: 1px solid #333;
+            background: #0a0a0a;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        h2 {
+            background: #222;
+            color: #fff;
+            font-size: 14px;
+            padding: 5px;
+            margin-top: 0;
+            text-transform: uppercase;
+            border-bottom: 1px solid #444;
+        }
+
+        .stats-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .stats-list li {
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+
+        .stats-list b { color: #888; }
+
+        /* Reproductor oculto */
+        #music-trigger {
+            cursor: pointer;
+            color: #666;
+            text-decoration: underline;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar left"></div>
+    <div class="sidebar right"></div>
+
+    <div class="main-container">
+        <div class="header-banner"></div>
+
+        <div class="profile-grid">
+            <div class="photo-column">
+                <img src="im1.png" alt="Icono Principal">
+                <div class="box" style="margin-top:10px;">
+                    <h2>Contacto</h2>
+                    <p id="music-trigger" onclick="playMusic()">[ Reproducir Música ]</p>
+                    <audio id="myAudio" src="musica.mp3"></audio>
+                </div>
+            </div>
+
+            <div class="info-column">
+                <div class="box">
+                    <h2>Sobre mí</h2>
+                    <p>Escribe aquí tu descripción personal. Este espacio es ideal para explicar la visión de tu proyecto o lo que te inspira día a día.</p>
+                </div>
+
+                <div class="box">
+                    <h2>Detalles</h2>
+                    <ul class="stats-list">
+                        <li><b>Edad:</b> Tu Edad</li>
+                        <li><b>Habilidades:</b> Diseño, HTML, Gestión</li>
+                        <li><b>Gustos:</b> Música oscura, Estética retro, Programación</li>
+                        <li><b>Proyecto:</b> Tapitas con Causa</li>
+                    </ul>
+                </div>
+
+                <div class="box">
+                    <h2>Galería</h2>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px;">
+                        <img src="im3.png" style="width:100%; border:1px solid #333;">
+                        <img src="im4.png" style="width:100%; border:1px solid #333;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function playMusic() {
+            var audio = document.getElementById("myAudio");
+            if (audio.paused) {
+                audio.play();
+                document.getElementById("music-trigger").innerText = "[ Pausar Música ]";
+            } else {
+                audio.pause();
+                document.getElementById("music-trigger").innerText = "[ Reproducir Música ]";
+            }
+        }
+    </script>
+
+</body>
+</html>
